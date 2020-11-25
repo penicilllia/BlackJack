@@ -10,29 +10,50 @@ class GameProcess
   def initialize
     @user_bank = 100
     @dealer_bank = 100
-    @all_cards = []
+    
   end
 
   def interface
     puts 'Введите ваше имя: '
     @user_name = gets.chomp 
+    puts 'Начинаем игру!'
+    
+    new_game = Game.new(@user_name)
+    new_game.card_deck
+    @user_bank -= 10
+    @dealer_bank -= 10
 
+    new_game.take_user_card
+    new_game.take_user_card
+
+    new_game.take_dealer_card
+    new_game.take_dealer_card
+    
 
   end
 
-  def card_deck
-    [2, 3, 4, 5, 6, 7, 8, 9, 10].each do |num|
-      ['+', '<>', '<3', '^'].each do |suit|
-        @all_cards.push(Card.new(num, suit))
-      end
-    end
-    ['V', 'D', 'K', 'T'].each do |name|
-      ['+', '<>', '<3', '^'].each do |suit|
-        @all_cards.push(HighCard.new(name, suit))
-      end
-    end
-    p @all_cards
-  end
+  # def card_deck
+  #   (2 .. 10).to_a.each do |num|
+  #     ['+', '<>', '<3', '^'].each do |suit|
+  #       @all_cards.push(Card.new(num, suit))
+  #     end
+  #   end
+  #   ['V', 'D', 'K', 'T'].each do |name|
+  #     ['+', '<>', '<3', '^'].each do |suit|
+  #       @all_cards.push(HighCard.new(name, suit))
+  #     end
+  #   end
+  # end
+
+  # def random_element
+  #   @index = rand(@cards_count)
+  #   @cards_count -= 1
+  #   return @all_cards[@index]
+  # end
+
+  # def clear_array
+  #   @all_cards.delete_at(@index)
+  # end
 
 
 end
