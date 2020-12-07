@@ -1,138 +1,128 @@
 require_relative 'card.rb'
-require_relative 'high_card.rb'
+require_relative 'card_deck.rb'
+require_relative 'dealer.rb'
+require_relative 'hand.rb'
+require_relative 'player.rb'
+require_relative 'user_player.rb'
 
 class Game
-  attr_accessor :user_bank, :dealer_bank, :user_cards, :dealer_cards, :all_cards
-  attr_reader :user_sum_points, :dealer_sum_points
 
-  def initialize(user_name)
-    @user_name = user_name
-    @user_cards = []
-    @dealer_cards = []
-    @cards_count = 52
-    @all_cards = []
-    @user_sum_points = 0
-    @dealer_sum_points = 0
+  def get_user_name
+    puts 'Введите своё имя: '
+    name = gets.chomp
+    name
   end
 
-  def take_user_card
-    card = random_element
-    @user_cards.push(card)
-    @user_sum_points += card.value
-    clear_array
-    @user_cards.each do |card| 
-      if card.number == 'T'
-        card.calculate_T(@user_sum_points)
-      end
-    end
-  end
-
-  def take_dealer_card
-    card = random_element
-    @dealer_cards.push(card)
-    @dealer_sum_points += card.value
-    clear_array
-    @dealer_cards.each do |card|
-      if card.number == 'T'
-        card.calculate_T(@dealer_sum_points)
-      end
-    end
-  end
-
-  def random_element
-    @index = rand(@cards_count)
-    @cards_count -= 1
-    return @all_cards[@index]
-  end
-
-  def clear_array
-    @all_cards.delete_at(@index)
-  end
-
-  def card_deck
-    (2 .. 10).to_a.each do |num|
-      ['+', '<>', '<3', '^'].each do |suit|
-        @all_cards.push(Card.new(num, suit))
-      end
-    end
-    ['V', 'D', 'K', 'T'].each do |name|
-      ['+', '<>', '<3', '^'].each do |suit|
-        @all_cards.push(HighCard.new(name, suit))
-      end
-    end
-  end
-
-  def print_user_cards
-    puts
+  def print_user_cards(player)
     puts 'Ваши карты: '
-    @user_cards.each do |card|
-      print card.number 
+    player.hand.cards.each do |card|
+      print card.number
+      print ' '
       print card.suit
-      print '  '
+      print ',   '
     end
     puts
-    print 'Ваша сумма очков: '
-    puts @user_sum_points
-  end
-
-  def print_dealer_hidden_cards
-    puts
-    puts 'Карты диллера: '
-    @dealer_cards.each do |card|
-      print '* '
-    end
-    puts
-  end
-
-  def print_dealer_cards
-    puts
-    puts 'Карты диллера: '
-    @dealer_cards.each do |card|
-      print card.number 
-      print card.suit
-      print '  '
-    end
-    puts
-    print 'Cумма очков диллера: '
-    puts @dealer_sum_points
+    puts "Ваш банк: #{player.bank}"
+    puts "Ваша сумма очков: #{player.hand.sum_points}"
   end
 
   def user_move
-    puts 'Ваш ход.'
-    puts '1. Пропустить ход'
-    puts '2. Добавить карту'
-    puts '3. Открыть карты'
-    user_chose = gets.chomp.to_i
-    
-    if user_chose == 2
-      take_user_card
-      dealer_move
-    elsif user_chose == 1
-      print_user_cards
-      dealer_move
-    elsif user_chose == 3
-      end_game
+    puts 'Введите число, соответствующее вашему действию: '
+    puts ' 1. Пропустить ход.'
+    puts ' 2. Добавить карту.'
+    puts ' 3. Открыть карты.'
+    answer = gets.chomp.to_i
+    answer
+  end
+
+  def print_dealer_info(player)
+    puts 'Карты диллера: '
+    player.hand.cards.each do |card|
+      print '* '
+    end
+    puts
+    puts "Банк диллера: #{player.bank}"
+    puts 
+  end
+
+  def print_dealer_cards(player)
+    puts 'Карты диллера: '
+    player.hand.cards.each do |card|
+      print card.number
+      print ' '
+      print card.suit
+      print ',   '
+    end
+    puts
+    puts "Банк диллера: #{player.bank}"
+    puts "Сумма очков диллера: #{player.hand.sum_points}"
+  end
+
+  def take_play_card(player)
+    player.take_card
+    calc_points(player)
+  end
+
+  def check_cards(user, dealer)
+    if (user.hand.cards.size < 3) && (dealer.hand.cards.size < 3)
+      true
     else
-      puts 'Такого варианта нет!'
-    end
-  end
-  
-  def dealer_move
-    if @dealer_sum_points < 17
-      take_dealer_card
-    end
-
-    if @user_cards.size < 3
-      user_move
-    elsif @dealer_cards.size == 3
-      end_game
+      false
     end
   end
 
-  def end_game
-    print_user_cards
-    print_dealer_cards
+  def calc_points(player)
+    player.hand.count_points
+    player.hand.cards.each do |card|
+      if card.suit == 'T'
+        card.calculate_T(player.hand.sum_points) 
+      end
+    end
   end
+
+  def calculate_winner(user, dealer)
+    if dealer.hand.sum_points <= 21
+      if user.hand.sum_points <= 21
+        if dealer.hand.sum_points > user.hand.sum_points
+          puts 'Диллер выиграл!'
+          dealer.bank += 20
+        elsif dealer.hand.sum_points < user.hand.sum_points
+          puts "Вы выиграли!"
+          user.bank += 20
+        else
+          puts 'Ничья!'
+          user.bank += 10
+          dealer.bank += 10
+        end
+      else
+        puts 'Диллер выиграл!'
+        dealer.bank += 20
+      end
+    elsif user.hand.sum_points <= 21
+      puts "Вы выиграли!"
+      user.bank += 20
+    else
+      puts 'Ничья!'
+      user.bank += 10
+      dealer.bank += 10
+    end
+  end
+
+  def produce_game
+    puts 'Вы хотите продолжить игру?'
+    puts ' 1. Продолжить игру.'
+    puts ' 2. Завершить игру.'
+    user_chose = gets.chomp.to_i
+    user_chose == 1 ? true : false 
+  end
+
+  def clear_game(player)
+    player.hand.cards.each do |card|
+      player.hand.cards.delete(card)
+    end
+    player.hand.sum_points = 0
+  end
+
 
 end
 

@@ -1,15 +1,17 @@
 require_relative 'card.rb'
 require_relative 'game.rb'
-require_relative 'high_card.rb'
+require_relative 'card_deck.rb'
+require_relative 'dealer.rb'
+require_relative 'hand.rb'
+require_relative 'player.rb'
+require_relative 'user_player.rb'
 
 class GameProcess
 
   attr_accessor :user_bank, :dealer_bank
 
   def initialize
-    @user_bank = 100
-    @dealer_bank = 100
-    @rate = 0
+   
   end
 
   def interface
@@ -43,9 +45,6 @@ class GameProcess
       puts "Счет диллера: #{@dealer_bank}"
 
       @new_game.user_move
-
-      #@new_game.dealer_move
-
       end_current_game
 
       puts 
