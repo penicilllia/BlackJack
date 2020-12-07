@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Card
   attr_reader :number, :suit, :value
 
@@ -8,21 +10,22 @@ class Card
   end
 
   def calculate_T(sum_cards)
-    if sum_cards <= 10
-      @value = 11
-    end
+    @value = if sum_cards <= 11
+               11
+             else
+               1
+             end
   end
 
-  private 
+  private
 
   def calculate_cost(number)
-    if ['V', 'D', 'K'].include? number.to_s.upcase
+    if %w[V D K].include? number.to_s.upcase
       10
     elsif number.to_s.upcase == 'T'
       1
     else
       number.to_i
     end
-  end 
-
+  end
 end

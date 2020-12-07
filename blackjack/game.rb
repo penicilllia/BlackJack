@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'card.rb'
 require_relative 'card_deck.rb'
 require_relative 'dealer.rb'
@@ -6,7 +8,6 @@ require_relative 'player.rb'
 require_relative 'user_player.rb'
 
 class Game
-
   def get_user_name
     puts 'Введите своё имя: '
     name = gets.chomp
@@ -14,6 +15,7 @@ class Game
   end
 
   def print_user_cards(player)
+    puts
     puts 'Ваши карты: '
     player.hand.cards.each do |card|
       print card.number
@@ -27,6 +29,7 @@ class Game
   end
 
   def user_move
+    puts
     puts 'Введите число, соответствующее вашему действию: '
     puts ' 1. Пропустить ход.'
     puts ' 2. Добавить карту.'
@@ -36,16 +39,17 @@ class Game
   end
 
   def print_dealer_info(player)
+    puts
     puts 'Карты диллера: '
-    player.hand.cards.each do |card|
+    player.hand.cards.each do |_card|
       print '* '
     end
     puts
     puts "Банк диллера: #{player.bank}"
-    puts 
   end
 
   def print_dealer_cards(player)
+    puts
     puts 'Карты диллера: '
     player.hand.cards.each do |card|
       print card.number
@@ -71,15 +75,6 @@ class Game
     end
   end
 
-  def calc_points(player)
-    player.hand.count_points
-    player.hand.cards.each do |card|
-      if card.suit == 'T'
-        card.calculate_T(player.hand.sum_points) 
-      end
-    end
-  end
-
   def calculate_winner(user, dealer)
     if dealer.hand.sum_points <= 21
       if user.hand.sum_points <= 21
@@ -87,7 +82,7 @@ class Game
           puts 'Диллер выиграл!'
           dealer.bank += 20
         elsif dealer.hand.sum_points < user.hand.sum_points
-          puts "Вы выиграли!"
+          puts 'Вы выиграли!'
           user.bank += 20
         else
           puts 'Ничья!'
@@ -99,7 +94,7 @@ class Game
         dealer.bank += 20
       end
     elsif user.hand.sum_points <= 21
-      puts "Вы выиграли!"
+      puts 'Вы выиграли!'
       user.bank += 20
     else
       puts 'Ничья!'
@@ -113,16 +108,10 @@ class Game
     puts ' 1. Продолжить игру.'
     puts ' 2. Завершить игру.'
     user_chose = gets.chomp.to_i
-    user_chose == 1 ? true : false 
+    user_chose == 1
   end
 
   def clear_game(player)
-    player.hand.cards.each do |card|
-      player.hand.cards.delete(card)
-    end
-    player.hand.sum_points = 0
+    player.hand.cards.clear
   end
-
-
 end
-

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require_relative 'card.rb'
 
-class CardDeck 
-
+class CardDeck
   attr_reader :deck, :cards_count
 
   def initialize
@@ -19,26 +20,25 @@ class CardDeck
   private
 
   def create
-    (2 .. 10).to_a.each do |num|
+    (2..10).to_a.each do |num|
       ['+', '<>', '<3', '^'].each do |suit|
         @deck.push(Card.new(num, suit))
       end
     end
-    ['V', 'D', 'K', 'T'].each do |name|
+    %w[V D K T].each do |name|
       ['+', '<>', '<3', '^'].each do |suit|
         @deck.push(Card.new(name, suit))
       end
     end
   end
-  
+
   def random_element
     @index = rand(@cards_count)
     @cards_count -= 1
-    return @deck[@index]
+    @deck[@index]
   end
 
   def clear_array
     @deck.delete_at(@index)
   end
-
 end

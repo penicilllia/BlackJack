@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'card.rb'
 require_relative 'card_deck.rb'
 require_relative 'dealer.rb'
@@ -7,9 +9,7 @@ require_relative 'player.rb'
 require_relative 'user_player.rb'
 
 class Main
-
   def main_game
-    
     game = Game.new
     name = game.get_user_name
     @game_status = true
@@ -18,7 +18,7 @@ class Main
     @user_player = UserPlayer.new(name, 100, @deck)
     @dealer = Dealer.new('Dealer', 100, @deck)
 
-    while @game_status == true && (@user_player.bank != 0 && @dealer.bank != 0) 
+    while @game_status == true && (@user_player.bank != 0 && @dealer.bank != 0)
       @user_player.bank -= 10
       @dealer.bank -= 10
 
@@ -27,10 +27,7 @@ class Main
       @dealer.take_card
       @dealer.take_card
 
-      game.calc_points(@user_player)
-      game.calc_points(@dealer)
-
-      while (@user_player.is_stopped == false) && (game.check_cards(@user_player, @dealer) == true)
+      while @user_player.is_stopped == false && game.check_cards(@user_player, @dealer)
         game.print_dealer_info(@dealer)
         game.print_user_cards(@user_player)
         chose = game.user_move
@@ -46,17 +43,11 @@ class Main
         @deck = CardDeck.new
         game.clear_game(@user_player)
         game.clear_game(@dealer)
-        @user_player.is_stopped == true
+        @user_player.is_stopped = false
       else
         @game_status = false
         puts 'Спасибо за игру!'
       end
-      puts '111111111111111111111111111111111111111111111111111111111111111111111111111111'
-
     end
-
   end
-
-
-
 end
