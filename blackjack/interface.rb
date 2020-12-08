@@ -7,11 +7,18 @@ require_relative 'hand.rb'
 require_relative 'player.rb'
 require_relative 'user_player.rb'
 
-class Game
+class Interface
   def get_user_name
     puts 'Введите своё имя: '
     name = gets.chomp
     name
+  end
+
+  def first_cards(user, dealer)
+    user.take_card
+    user.take_card
+    dealer.take_card
+    dealer.take_card
   end
 
   def print_user_cards(player)
@@ -25,7 +32,7 @@ class Game
     end
     puts
     puts "Ваш банк: #{player.bank}"
-    puts "Ваша сумма очков: #{player.hand.sum_points}"
+    puts "Ваша сумма очков: #{player.hand.count_points}"
   end
 
   def user_move
@@ -59,7 +66,7 @@ class Game
     end
     puts
     puts "Банк диллера: #{player.bank}"
-    puts "Сумма очков диллера: #{player.hand.sum_points}"
+    puts "Сумма очков диллера: #{player.hand.count_points}"
   end
 
   def take_play_card(player)
@@ -76,12 +83,12 @@ class Game
   end
 
   def calculate_winner(user, dealer)
-    if dealer.hand.sum_points <= 21
-      if user.hand.sum_points <= 21
-        if dealer.hand.sum_points > user.hand.sum_points
+    if dealer.hand.count_points <= 21
+      if user.hand.count_points <= 21
+        if dealer.hand.count_points > user.hand.count_points
           puts 'Диллер выиграл!'
           dealer.bank += 20
-        elsif dealer.hand.sum_points < user.hand.sum_points
+        elsif dealer.hand.count_points < user.hand.count_points
           puts 'Вы выиграли!'
           user.bank += 20
         else
@@ -93,7 +100,7 @@ class Game
         puts 'Диллер выиграл!'
         dealer.bank += 20
       end
-    elsif user.hand.sum_points <= 21
+    elsif user.hand.count_points <= 21
       puts 'Вы выиграли!'
       user.bank += 20
     else
@@ -111,7 +118,13 @@ class Game
     user_chose == 1
   end
 
-  def clear_game(player)
-    player.hand.cards.clear
+  def clear_game(user, dealer)
+    user.hand.cards.clear
+    dealer.hand.cards.clear
   end
+
+  def goodbye
+    puts 'Спасибо за игру!'
+  end
+
 end

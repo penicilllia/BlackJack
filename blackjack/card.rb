@@ -9,7 +9,7 @@ class Card
     @value = calculate_cost(number)
   end
 
-  def calculate_T(sum_cards)
+  def calculate_ace(sum_cards)
     @value = if sum_cards <= 11
                11
              else

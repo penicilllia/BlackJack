@@ -5,13 +5,13 @@ class Hand
 
   def initialize
     @cards = []
-    @sum_points = 0
   end
 
   def count_points
-    @sum_points = 0
+    sum_points = 0
     @cards.each do |card|
-      @sum_points += card.value
+      sum_points += card.value
     end
+    sum_points
   end
 end

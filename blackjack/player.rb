@@ -18,7 +18,7 @@ class Player
     @hand.cards.push(@deck.take_card)
     @hand.count_points
     @hand.cards.each_with_index do |card, index|
-      @hand.cards[index].calculate_T(@hand.sum_points) if card.number == 'T'
+      @hand.cards[index].calculate_ace(@hand.count_points) if card.number == 'T'
     end
     @hand.count_points
   end
