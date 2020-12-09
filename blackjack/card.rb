@@ -3,6 +3,9 @@
 class Card
   attr_reader :number, :suit, :value
 
+  SUITS = %w[♠ ♥ ♣ ♦].freeze
+  VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'V', 'D', 'K', 'T'].freeze
+
   def initialize(number, suit)
     @number = number
     @suit = suit

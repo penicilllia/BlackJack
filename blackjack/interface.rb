@@ -82,35 +82,19 @@ class Interface
     end
   end
 
-  def calculate_winner(user, dealer)
-    if dealer.hand.count_points <= 21
-      if user.hand.count_points <= 21
-        if dealer.hand.count_points > user.hand.count_points
-          puts 'Диллер выиграл!'
-          dealer.bank += 20
-        elsif dealer.hand.count_points < user.hand.count_points
-          puts 'Вы выиграли!'
-          user.bank += 20
-        else
-          puts 'Ничья!'
-          user.bank += 10
-          dealer.bank += 10
-        end
-      else
-        puts 'Диллер выиграл!'
-        dealer.bank += 20
-      end
-    elsif user.hand.count_points <= 21
+  def print_winner(winner)
+    puts
+    if winner == 'dealer'
+      puts 'Диллер выиграл!'
+    elsif winner == 'user'
       puts 'Вы выиграли!'
-      user.bank += 20
     else
       puts 'Ничья!'
-      user.bank += 10
-      dealer.bank += 10
     end
   end
 
   def produce_game
+    puts
     puts 'Вы хотите продолжить игру?'
     puts ' 1. Продолжить игру.'
     puts ' 2. Завершить игру.'

@@ -34,7 +34,10 @@ class Main
       game.print_dealer_cards(@dealer)
       game.print_user_cards(@user_player)
 
-      game.calculate_winner(@user_player, @dealer)
+      calculate_winner
+      winner = calculate_winner
+      game.print_winner(winner)
+      
       if game.produce_game == true
         @deck = CardDeck.new
         game.clear_game(@user_player, @dealer)
@@ -45,4 +48,33 @@ class Main
       end
     end
   end
+
+  def calculate_winner
+    winner = ''
+    if @dealer.hand.count_points <= 21
+      if @user_player.hand.count_points <= 21
+        if @dealer.hand.count_points > @user_player.hand.count_points
+          @dealer.bank += 20
+          winner = 'dealer'
+        elsif @dealer.hand.count_points < @user_player.hand.count_points
+          @user_player.bank += 20
+          winner = 'user'
+        else
+          @user_player.bank += 10
+          @dealer.bank += 10
+        end
+      else
+        @dealer.bank += 20
+        winner = 'dealer'
+      end
+    elsif @user_player.hand.count_points <= 21
+      winner = 'user'
+      @user_player.bank += 20
+    else
+      @user_player.bank += 10
+      @dealer.bank += 10
+    end
+    winner
+  end
+
 end

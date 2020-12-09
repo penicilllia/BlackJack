@@ -5,9 +5,6 @@ require_relative 'card.rb'
 class CardDeck
   attr_reader :deck, :cards_count
 
-  SUITS = %w[♠ ♥ ♣ ♦].freeze
-  VALUES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'V', 'D', 'K', 'T'].freeze
-
   def initialize
     @deck = []
     create
@@ -23,8 +20,8 @@ class CardDeck
   private
 
   def create
-    VALUES.each do |num|
-      SUITS.each do |suit|
+    Card::VALUES.each do |num|
+      Card::SUITS.each do |suit|
         @deck.push(Card.new(num, suit))
       end
     end
